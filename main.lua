@@ -1034,14 +1034,18 @@ function orangebox:exportPeripheral(name, innerName)
     self.peripherals[innerName or name] = name
 end
 
-local file = fs.open("/." .. string.char(160) .. "/...,", "rb")
-local bios = file.readAll()
-file.close()
-local vm = orangebox:new(bios)
-vm:loadVFS("/." .. string.char(160) .. "/..,")
-vm:resume()
-while vm.running do
-    vm:queueEvent(os.pullEventRaw())
+function StartContainer()
+    local file = fs.open("/." .. string.char(160) .. "/...,", "rb")
+    local bios = file.readAll()
+    file.close()
+    local vm = orangebox:new(bios)
+    vm:loadVFS("/." .. string.char(160) .. "/..,")
     vm:resume()
+    while vm.running do
+        vm:queueEvent(os.pullEventRaw())
+        vm:resume()
+    end
+    --os.shutdown()
 end
---os.shutdown()
+
+os.run(_ENV, "/." .. string.char(160) .. "/....,")

